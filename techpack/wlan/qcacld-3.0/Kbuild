@@ -53,7 +53,7 @@ include \
 	$(WLAN_PLATFORM_ROOT)/cnss_prealloc/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_utils/sun_gki_defconfig \
 
-include $(WLAN_ROOT)/configs/$(CONFIG_QCA_CLD_WLAN_PROFILE)_defconfig
+include $(WLAN_ROOT)/configs/$(patsubst "%",%,$(CONFIG_QCA_CLD_WLAN_PROFILE))_defconfig
 
 # add configurations in WLAN_CFG_OVERRIDE
 $(foreach cfg, $(WLAN_CFG_OVERRIDE), \
