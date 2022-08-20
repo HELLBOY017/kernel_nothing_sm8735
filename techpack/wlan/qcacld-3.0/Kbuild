@@ -5208,9 +5208,10 @@ else
 endif
 
 # Android wifi state control interface
-ifneq ($(CONFIG_WLAN_CTRL_NAME),)
-ccflags-y += -DWLAN_CTRL_NAME=\"$(CONFIG_WLAN_CTRL_NAME)\"
+ifeq ($(CONFIG_WLAN_CTRL_NAME),)
+	WLAN_CTRL_NAME=wlan
 endif
+ccflags-y += -DWLAN_CTRL_NAME=\"$(CONFIG_WLAN_CTRL_NAME)\"
 
 ccflags-$(CONFIG_CFG80211_PROP_MULTI_LINK_SUPPORT) += -DCFG80211_PROP_MULTI_LINK_SUPPORT
 
