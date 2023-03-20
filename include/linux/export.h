@@ -24,7 +24,7 @@
  */
 
 #ifndef __ASSEMBLY__
-#ifdef MODULE
+#if defined(MODULE) && !defined(CONFIG_INTEGRATE_MODULES)
 extern struct module __this_module;
 #define THIS_MODULE (&__this_module)
 #else
@@ -56,7 +56,8 @@ extern struct module __this_module;
 		__EXPORT_SYMBOL_REF(sym)	ASM_NL	\
 	.previous
 
-#if defined(__DISABLE_EXPORTS)
+#if defined(__DISABLE_EXPORTS) || \
+    defined(CONFIG_INTEGRATE_MODULES)
 
 /*
  * Allow symbol exports to be disabled completely so that C code may
