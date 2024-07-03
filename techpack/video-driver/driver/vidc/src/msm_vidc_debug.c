@@ -211,20 +211,12 @@ module_param_cb(msm_vidc_synx_fence_enable,
 	&msm_vidc_synx_fence_debug_fops, &g_core, 0644);
 
 bool msm_vidc_lossless_encode = !true;
-EXPORT_SYMBOL(msm_vidc_lossless_encode);
-
 bool msm_vidc_syscache_disable = !true;
-EXPORT_SYMBOL(msm_vidc_syscache_disable);
-
 int msm_vidc_clock_voting = !1;
 int msm_vidc_ddr_bw = !1;
 int msm_vidc_llc_bw = !1;
-
 bool msm_vidc_fw_dump = !true;
-EXPORT_SYMBOL(msm_vidc_fw_dump);
-
 unsigned int msm_vidc_enable_bugon = !1;
-EXPORT_SYMBOL(msm_vidc_enable_bugon);
 
 #define MAX_DBG_BUF_SIZE 4096
 
