@@ -28,4 +28,6 @@ source "techpack/bt-kernel/btfmcodec/Kconfig"
 
 source "techpack/bt-kernel/soundwire/Kconfig"
 
+source "techpack/wlan/Kconfig"
+
 endmenu
