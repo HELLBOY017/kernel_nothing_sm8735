@@ -1,10 +1,12 @@
+WLAN_PLATFORM_ROOT ?= $(srctree)/techpack/wlan/platform
+export WLAN_PLATFORM_ROOT
+
 include \
 	$(WLAN_PLATFORM_ROOT)/cnss2/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_genl/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_prealloc/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_utils/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/icnss2/sun_gki_defconfig
-
 
 ifeq ($(CONFIG_CNSS_OUT_OF_TREE),y)
 KBUILD_CPPFLAGS += -DCONFIG_CNSS_OUT_OF_TREE
