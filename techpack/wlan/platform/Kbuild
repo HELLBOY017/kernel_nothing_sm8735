@@ -8,6 +8,11 @@ include \
 	$(WLAN_PLATFORM_ROOT)/cnss_utils/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/icnss2/sun_gki_defconfig
 
+LINUXINCLUDE += -I$(WLAN_PLATFORM_ROOT)/../../securemsm-kernel/smcinvoke/
+LINUXINCLUDE += -I$(WLAN_PLATFORM_ROOT)/../../securemsm-kernel/linux/
+LINUXINCLUDE += -I$(WLAN_PLATFORM_ROOT)/../../securemsm-kernel/include/linux/
+LINUXINCLUDE += -I$(WLAN_PLATFORM_ROOT)/../../securemsm-kernel/include/uapi/linux/
+
 ifeq ($(CONFIG_CNSS_OUT_OF_TREE),y)
 KBUILD_CPPFLAGS += -DCONFIG_CNSS_OUT_OF_TREE
 endif
