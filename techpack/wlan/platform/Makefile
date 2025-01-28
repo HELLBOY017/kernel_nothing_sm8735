@@ -36,6 +36,8 @@ KBUILD_OPTIONS += CONFIG_ICNSS2=m
 KBUILD_OPTIONS += CONFIG_ICNSS2_QMI=y
 KBUILD_OPTIONS += CONFIG_ICNSS2_DEBUG=y
 endif
+
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(M)/../../data-kernel/drivers/smem-mailbox/Module.symvers
 endif
 
 all: modules
