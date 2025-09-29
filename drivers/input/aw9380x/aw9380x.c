@@ -11,6 +11,7 @@
 #define AW9380X_RW_RETRY_TIME_MIN (2000)
 #define AW9380X_RW_RETRY_TIME_MAX (3000)
 #define AW9380X_IRQ_STATE_TIME (1000)
+#define AW9380X_TIME_DEBOUNCE_TIME (1000)
 #define AW9380X_REG_STEP (0x400 - 0x250)
 
 static struct mutex aw9380x_lock;
@@ -1878,28 +1879,29 @@ static void aw9380x_data_update_work_func(struct work_struct *work)
 	int32_t diff_value[2] = {0};
 	int32_t baseline_value[2] = {0};
 
-	for (i = 0; i < AW9380X_CH01_NUM; i++) {
-		ret = aw9380x_i2c_read(p_cap->i2c, REG_DIFF_CH0 + i * AW9380X_REG_STEP, &diff_data[i]);
-		if (ret != AW_OK) {
-			AWLOGE(p_cap->dev, "read diff err: %d", ret);
-		}
-		ret = aw9380x_i2c_read(p_cap->i2c, AW9380X_RAW_CH0 + i * AW9380X_REG_STEP, &raw_data[i]);
-		if (ret != AW_OK) {
-			AWLOGE(p_cap->dev, "read rawdata err: %d", ret);
-		}
-		ret = aw9380x_i2c_read(p_cap->i2c, REG_BASELINE_CH0 + i * AW9380X_REG_STEP, &baseline_data[i]);
-		if (ret != AW_OK) {
-			AWLOGE(p_cap->dev, "read baseline err: %d", ret);
-		}
-		rawdata_value[i] = (int32_t)raw_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
-		diff_value[i] = (int32_t)diff_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
-		baseline_value[i] = (int32_t)baseline_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
-	}
-	AWLOGI(p_cap->dev, "force: rawdata = %d diff = %d baseline = %d, cap: rawdata = %d diff = %d baseline = %d",
-		rawdata_value[0], diff_value[0], baseline_value[0], rawdata_value[1], diff_value[1], baseline_value[1]);
 	if (!(p_cap->pm_suspended)) {
+		for (i = 0; i < AW9380X_CH01_NUM; i++) {
+			ret = aw9380x_i2c_read(p_cap->i2c, REG_DIFF_CH0 + i * AW9380X_REG_STEP, &diff_data[i]);
+			if (ret != AW_OK) {
+				AWLOGE(p_cap->dev, "read diff err: %d", ret);
+			}
+			ret = aw9380x_i2c_read(p_cap->i2c, AW9380X_RAW_CH0 + i * AW9380X_REG_STEP, &raw_data[i]);
+			if (ret != AW_OK) {
+				AWLOGE(p_cap->dev, "read rawdata err: %d", ret);
+			}
+			ret = aw9380x_i2c_read(p_cap->i2c, REG_BASELINE_CH0 + i * AW9380X_REG_STEP, &baseline_data[i]);
+			if (ret != AW_OK) {
+				AWLOGE(p_cap->dev, "read baseline err: %d", ret);
+			}
+			rawdata_value[i] = (int32_t)raw_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
+			diff_value[i] = (int32_t)diff_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
+			baseline_value[i] = (int32_t)baseline_data[i] / (int32_t)AW9380X_DATA_PROCESS_FACTOR;
+		}
+		AWLOGI(p_cap->dev, "force: rawdata = %d diff = %d baseline = %d, cap: rawdata = %d diff = %d baseline = %d",
+			rawdata_value[0], diff_value[0], baseline_value[0], rawdata_value[1], diff_value[1], baseline_value[1]);
 		mod_timer(&p_cap->timer, jiffies + msecs_to_jiffies(awlog_time));
 	}
+
 	if (awlog_time == 0) {
 		del_timer(&p_cap->timer);
 	}
@@ -1915,6 +1917,10 @@ static void aw9380x_irq_state_work_handler(struct work_struct *work)
 	if (gpio_state == 0) {
 		gpio_low_count = gpio_low_count + 1;
 	}
+
+	if (p_cap->pm_suspended)
+		return;
+
 	if (gpio_low_count >= 3) {
 		aw9380x_cap_default_irq_handle(irq, p_cap);
 		gpio_low_count = 0;
@@ -4378,8 +4384,10 @@ static int aw9380x_suspend(struct device *dev)
 
 	reinit_completion(&p_cap->pm_complete);
 	p_cap->pm_suspended = 1;
-	AWLOGI(dev, "Suspend: irq_gpio_value %d", irq_gpio_value);
+	AWLOGI(dev, "Suspend: irq_gpio_value %d awlog_time %d", irq_gpio_value, awlog_time);
 	del_timer(&p_cap->irq_state_timer);
+	if (awlog_time > 0)
+		del_timer(&p_cap->timer);
 	if (p_cap->dts_info.use_pm == true)
 		aw9380x_mode_set(p_cap, p_cap->pm_info->suspend_set_mode);
 
@@ -4398,12 +4406,12 @@ static int aw9380x_resume(struct device *dev)
 	complete(&p_cap->pm_complete);
 	p_cap->pm_suspended = 0;
 	if (awlog_time > 0) {
-		mod_timer(&p_cap->timer, jiffies + msecs_to_jiffies(awlog_time));
+		mod_timer(&p_cap->timer, jiffies + msecs_to_jiffies(AW9380X_TIME_DEBOUNCE_TIME + awlog_time));
 	} else {
 		del_timer(&p_cap->timer);
 	}
-	AWLOGI(dev, "Resume: irq_gpio_value %d", irq_gpio_value);
-	mod_timer(&p_cap->irq_state_timer, jiffies + msecs_to_jiffies(AW9380X_IRQ_STATE_TIME));
+	AWLOGI(dev, "Resume: irq_gpio_value %d awlog_time %d", irq_gpio_value, awlog_time);
+	mod_timer(&p_cap->irq_state_timer, jiffies + msecs_to_jiffies(AW9380X_TIME_DEBOUNCE_TIME + AW9380X_IRQ_STATE_TIME));
 	if (p_cap->dts_info.use_pm == true)
 		aw9380x_mode_set(p_cap, p_cap->pm_info->suspend_set_mode);
 
