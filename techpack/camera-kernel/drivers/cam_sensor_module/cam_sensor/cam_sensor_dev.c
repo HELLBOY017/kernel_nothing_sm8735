@@ -11,6 +11,7 @@
 #include "camera_main.h"
 #include "cam_compat.h"
 #include "cam_mem_mgr_api.h"
+#include "cam_sensor_nothing.h"
 
 static struct cam_sensor_i3c_sensor_data {
 	struct cam_sensor_ctrl_t                  *s_ctrl;
@@ -818,6 +819,8 @@ int cam_sensor_driver_init(void)
 	int rc;
 	struct device_node                      *dev;
 	int num_entries = 0;
+
+	cam_nt_driver_init();
 
 	rc = platform_driver_register(&cam_sensor_platform_driver);
 	if (rc < 0) {

@@ -1669,6 +1669,11 @@ int msm_vidc_set_auto_framerate(struct msm_vidc_inst *inst, u64 timestamp)
 	if (counter < ENC_FPS_WINDOW)
 		goto exit;
 
+	if ( curr_fr > inst->capabilities[FRAME_RATE].value ) {
+		i_vpr_l(inst, "%s: fps: %u exceeds bounds. Will be constrained to framerate set by client.\n", __func__, curr_fr >> 16);
+		curr_fr = inst->capabilities[FRAME_RATE].value;
+	}
+
 	/* if framerate changed and stable for 2 frames, set to firmware */
 	if (curr_fr == prev_fr && curr_fr != inst->auto_framerate) {
 		i_vpr_l(inst, "%s: updated fps:  %u -> %u\n", __func__,

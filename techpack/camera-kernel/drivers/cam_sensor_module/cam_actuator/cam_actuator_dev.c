@@ -12,6 +12,7 @@
 #include "camera_main.h"
 #include "cam_compat.h"
 #include "cam_mem_mgr_api.h"
+#include "cam_sensor_nothing.h"
 
 static struct cam_i3c_actuator_data {
 	struct cam_actuator_ctrl_t                  *a_ctrl;
@@ -66,6 +67,7 @@ static long cam_actuator_subdev_ioctl(struct v4l2_subdev *sd,
 	case VIDIOC_CAM_CONTROL:
 		rc = cam_actuator_driver_cmd(a_ctrl, arg);
 		if (rc) {
+			cam_nt_driver_errcode(a_ctrl->soc_info.index, NT_CAM_ACTUATOR_ERR);
 			if (rc == -EBADR)
 				CAM_INFO(CAM_ACTUATOR,
 					"Failed for driver_cmd: %d, it has been flushed",

@@ -12,6 +12,7 @@
 #include "cam_common_util.h"
 #include "cam_packet_util.h"
 #include "cam_mem_mgr_api.h"
+#include "cam_sensor_nothing.h"
 
 int cam_flash_led_prepare(struct led_trigger *trigger, int options,
 	int *max_current, bool is_wled)
@@ -2005,9 +2006,11 @@ int cam_flash_apply_request(struct cam_req_mgr_apply_request *apply)
 
 	mutex_lock(&fctrl->flash_mutex);
 	rc = fctrl->func_tbl.apply_setting(fctrl, apply->request_id);
-	if (rc)
+	if (rc) {
+		cam_nt_driver_errcode(fctrl->soc_info.index, NT_CAM_FLASH_ERR);
 		CAM_ERR(CAM_FLASH, "apply_setting failed with rc=%d",
 			rc);
+	}
 	mutex_unlock(&fctrl->flash_mutex);
 
 	return rc;

@@ -203,6 +203,7 @@ def _define_module(target, variant):
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_dev.c",
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_core.c",
                     "drivers/cam_sensor_module/cam_sensor/cam_sensor_soc.c",
+                    "drivers/cam_sensor_module/cam_sensor/cam_sensor_nothing.c",
                     "drivers/cam_sensor_module/cam_sensor_io/cam_sensor_io.c",
                     "drivers/cam_sensor_module/cam_sensor_io/cam_sensor_cci_i2c.c",
                     "drivers/cam_sensor_module/cam_sensor_io/cam_sensor_qup_i2c.c",

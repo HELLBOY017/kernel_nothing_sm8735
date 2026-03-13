@@ -30,8 +30,8 @@ def define_sun(t,v):
             "dummy_ts",
             "goodix_ts",
             "st_fts",
-            "focaltech_fts",
-            "qts"
+            "qts",
+            "focaltech_tp"
         ],
         config_options = [
             "TOUCH_DLKM_ENABLE",
@@ -40,9 +40,9 @@ def define_sun(t,v):
             "CONFIG_TOUCHSCREEN_GOODIX_BRL",
             "CONFIG_TOUCHSCREEN_ATMEL_MXT",
             "CONFIG_TOUCHSCREEN_ST",
-            "CONFIG_TOUCH_FOCALTECH",
+            "CONFIG_TOUCHSCREEN_FTS",
             "CONFIG_QTS_ENABLE",
-            "CONFIG_TOUCHSCREEN_DUMMY"
+            "CONFIG_TOUCHSCREEN_DUMMY",
         ],
 )
 

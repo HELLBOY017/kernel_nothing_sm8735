@@ -32053,6 +32053,7 @@ static int __wlan_hdd_cfg80211_set_chainmask(struct wiphy *wiphy,
 	struct dev_set_param setparam[MAX_PDEV_TXRX_PARAMS] = {};
 	uint8_t index = 0;
 	uint8_t ll_lt_sap_vdev_id;
+	tp_wma_handle wma;
 
 	ret = wlan_hdd_validate_context(hdd_ctx);
 	if (ret)
@@ -32105,10 +32106,20 @@ static int __wlan_hdd_cfg80211_set_chainmask(struct wiphy *wiphy,
 	ret = wma_send_multi_pdev_vdev_set_params(MLME_PDEV_SETPARAM,
 						  WMI_PDEV_ID_SOC, setparam,
 						  index);
-	if (QDF_IS_STATUS_ERROR(ret))
+	if (QDF_IS_STATUS_ERROR(ret)) {
 		hdd_err("failed to send TX, RX chain mask params");
+		return qdf_status_to_os_return(ret);
+	}
 
-	return ret;
+	wma = cds_get_context(QDF_MODULE_ID_WMA);
+	if (!wma) {
+		hdd_err("invalid wma");
+		return -EINVAL;
+	}
+	wma->pdevconfig.txchainmask = tx_mask;
+	wma->pdevconfig.rxchainmask = rx_mask;
+
+	return 0;
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))

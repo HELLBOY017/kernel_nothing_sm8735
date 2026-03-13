@@ -88,6 +88,29 @@ module_entry(
     deps = ["qts"],
 )
 
+#define ddk_module() for focaltech_tp
+module_entry(
+    name = "focaltech_tp",
+    config_option = "CONFIG_TOUCHSCREEN_FTS",
+    srcs = [
+            "focaltech_tp/focaltech_core.c",
+            "focaltech_tp/focaltech_debug.c",
+            "focaltech_tp/focaltech_esdcheck.c",
+            "focaltech_tp/focaltech_ex_fun.c",
+            "focaltech_tp/focaltech_ex_mode.c",
+            "focaltech_tp/focaltech_flash/focaltech_upgrade_ft3683g.c",
+            "focaltech_tp/focaltech_flash.c",
+            "focaltech_tp/focaltech_gesture.c",
+            "focaltech_tp/focaltech_hp.c",
+            "focaltech_tp/focaltech_point_report_check.c",
+            "focaltech_tp/focaltech_proximity.c",
+            "focaltech_tp/focaltech_spi_v2.c",
+            "focaltech_tp/focaltech_test/supported_ic/focaltech_test_ft3683g.c",
+            "focaltech_tp/focaltech_test/focaltech_test.c",
+            "focaltech_tp/focaltech_test/focaltech_test_ini.c"
+    ]
+)
+
 #define ddk_module() for synaptics_tcm_ts
 module_entry(
     name = "synaptics_tcm_ts",

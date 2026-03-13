@@ -24,7 +24,7 @@
 #include <asoc/wcd-mbhc-v2.h>
 #include <asoc/pdata.h>
 
-#define WCD_MBHC_ADC_HS_THRESHOLD_MV    1700
+#define WCD_MBHC_ADC_HS_THRESHOLD_MV    2520
 #define WCD_MBHC_ADC_HPH_THRESHOLD_MV   75
 #define WCD_MBHC_ADC_MICBIAS_MV         1800
 #define WCD_MBHC_FAKE_INS_RETRY         4
@@ -340,12 +340,26 @@ static int wcd_check_cross_conn(struct wcd_mbhc *mbhc)
 	if (mbhc->mbhc_cb->update_cross_conn_thr)
 		mbhc->mbhc_cb->update_cross_conn_thr(mbhc);
 
+	printk("%s: hphl_adc_res:%d hphl_cross_conn_thr:%d\n", __func__,
+		hphl_adc_res, mbhc->hphl_cross_conn_thr);
+	printk("%s: hphr_adc_res:%d hphr_cross_conn_thr:%d\n", __func__,
+		hphl_adc_res, mbhc->hphl_cross_conn_thr);
+	printk("%s: HPH_CROSS_CONN_THRESHOLD:%d\n", __func__,
+		HPH_CROSS_CONN_THRESHOLD);
+#if (!defined NOTH_FACTORY_BUILD)
+	if ((hphl_adc_res > mbhc->hphl_cross_conn_thr &&
+		hphr_adc_res > mbhc->hphr_cross_conn_thr) && (
+			(hphl_adc_res > HPH_CROSS_CONN_THRESHOLD) ||
+			(hphr_adc_res > HPH_CROSS_CONN_THRESHOLD)))
+#else
 	if (hphl_adc_res > mbhc->hphl_cross_conn_thr &&
-	    hphr_adc_res > mbhc->hphr_cross_conn_thr) {
+		hphr_adc_res > mbhc->hphr_cross_conn_thr)
+#endif
+	{
 		plug_type = MBHC_PLUG_TYPE_GND_MIC_SWAP;
-		pr_debug("%s: Cross connection identified\n", __func__);
+		printk("%s: Cross connection identified\n", __func__);
 	} else {
-		pr_debug("%s: No Cross connection found\n", __func__);
+		printk("%s: No Cross connection found\n", __func__);
 	}
 
 done:
@@ -390,6 +404,7 @@ static int wcd_mbhc_adc_get_spl_hs_thres(struct wcd_mbhc *mbhc)
 		hs_threshold = ((WCD_MBHC_ADC_HS_THRESHOLD_MV *
 			micbias_mv) / WCD_MBHC_ADC_MICBIAS_MV);
 	}
+	pr_debug("%s: hs_threshold:%d mbhc->hs_thr:%d micbias_mv:%d\n", __func__, hs_threshold, mbhc->hs_thr, micbias_mv);
 	return hs_threshold;
 }
 
@@ -408,6 +423,7 @@ static int wcd_mbhc_adc_get_hs_thres(struct wcd_mbhc *mbhc)
 		hs_threshold = ((WCD_MBHC_ADC_HS_THRESHOLD_MV *
 			micbias_mv) / WCD_MBHC_ADC_MICBIAS_MV);
 	}
+	pr_debug("%s: hs_threshold:%d mbhc->hs_thr:%d micbias_mv:%d\n", __func__, hs_threshold, mbhc->hs_thr, micbias_mv);
 	return hs_threshold;
 }
 
@@ -426,6 +442,7 @@ static int wcd_mbhc_adc_get_hph_thres(struct wcd_mbhc *mbhc)
 		hph_threshold = ((WCD_MBHC_ADC_HPH_THRESHOLD_MV *
 			micbias_mv) / WCD_MBHC_ADC_MICBIAS_MV);
 	}
+	pr_debug("%s: hph_threshold:%d mbhc->hph_thr:%d micbias_mv:%d\n", __func__, hph_threshold, mbhc->hph_thr, micbias_mv);
 	return hph_threshold;
 }
 
@@ -512,6 +529,8 @@ static bool wcd_is_special_headset(struct wcd_mbhc *mbhc)
 		/* Wait for 50ms for FSM to update result */
 		msleep(50);
 		output_mv = wcd_measure_adc_once(mbhc, MUX_CTL_IN2P);
+		pr_debug("%s: Spl headset hs_detect output_mv:%d adc_threshold:%d\n",
+			__func__, output_mv, adc_threshold);
 		if (output_mv <= adc_threshold) {
 			pr_debug("%s: Special headset detected in %d msecs\n",
 					__func__, delay);

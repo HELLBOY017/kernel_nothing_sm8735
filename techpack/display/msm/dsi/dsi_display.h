@@ -1002,4 +1002,6 @@ int dsi_display_get_clk_rate(void *display, u32 idx, u32 clk_type, u64 *clk_rate
  */
 void dsi_display_set_idle_pc_state(void *display, bool idle_pc);
 
+int dsi_display_set_lhbm_state(struct dsi_display *display, unsigned long fp_status);
+
 #endif /* _DSI_DISPLAY_H_ */

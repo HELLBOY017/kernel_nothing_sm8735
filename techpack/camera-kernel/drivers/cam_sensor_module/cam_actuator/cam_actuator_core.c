@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/module.h>
@@ -12,6 +12,7 @@
 #include "cam_common_util.h"
 #include "cam_packet_util.h"
 #include "cam_mem_mgr_api.h"
+#include "cam_sensor_nothing.h"
 
 int32_t cam_actuator_construct_default_power_setting(
 	struct cam_sensor_power_ctrl_t *power_info)
@@ -342,6 +343,12 @@ int32_t cam_actuator_apply_request(struct cam_req_mgr_apply_request *apply)
 
 release_mutex:
 	mutex_unlock(&(a_ctrl->actuator_mutex));
+
+	if (rc < 0)
+	{
+		cam_nt_driver_errcode(a_ctrl->soc_info.index, NT_CAM_ACTUATOR_ERR);
+	}
+
 	return rc;
 }
 
@@ -773,16 +780,6 @@ int32_t cam_actuator_i2c_pkt_parse(struct cam_actuator_ctrl_t *a_ctrl,
 			goto end;
 		}
 
-		mutex_lock(&(a_ctrl->read_buf_lock));
-		rc = cam_sensor_util_add_read_buf_to_list(&(a_ctrl->read_buf_list),
-			io_cfg->mem_handle[0]);
-		if (rc < 0) {
-			CAM_ERR(CAM_ACTUATOR, "Add read buf to list failed rc:%d", rc);
-			mutex_unlock(&(a_ctrl->read_buf_lock));
-			goto end;
-		}
-		mutex_unlock(&(a_ctrl->read_buf_lock));
-
 		rc = cam_sensor_i2c_read_data(
 			&i2c_read_settings,
 			&a_ctrl->io_master_info);
@@ -1095,9 +1092,6 @@ int32_t cam_actuator_driver_cmd(struct cam_actuator_ctrl_t *a_ctrl,
 	}
 
 release_mutex:
-	mutex_lock(&(a_ctrl->read_buf_lock));
-	cam_sensor_util_release_read_buf(&(a_ctrl->read_buf_list));
-	mutex_unlock(&(a_ctrl->read_buf_lock));
 	mutex_unlock(&(a_ctrl->actuator_mutex));
 
 	return rc;

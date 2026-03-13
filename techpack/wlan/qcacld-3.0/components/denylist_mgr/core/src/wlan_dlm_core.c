@@ -848,8 +848,9 @@ dlm_get_delta_of_bssid(enum dlm_reject_ap_type list_type,
 			(cur_timestamp -
 			 dlm_entry->ap_timestamp.userspace_avoid_timestamp);
 	case USERSPACE_DENYLIST_TYPE:
-		return cur_timestamp -
-			  dlm_entry->ap_timestamp.userspace_denylist_timestamp;
+		return MINUTES_TO_MS(cfg->deny_list_exipry_time) -
+			(cur_timestamp -
+			  dlm_entry->ap_timestamp.userspace_denylist_timestamp);
 	case DRIVER_AVOID_TYPE:
 		return MINUTES_TO_MS(cfg->avoid_list_exipry_time) -
 			(cur_timestamp -
@@ -1275,7 +1276,7 @@ dlm_get_reject_ap_reason(struct dlm_reject_ap *dlm_entry)
 	else if (dlm_entry->other)
 		return REASON_OTHER;
 
-	return REASON_OTHER;
+	return REASON_UNKNOWN;
 }
 
 static void dlm_fill_reject_list(qdf_list_t *reject_db_list,

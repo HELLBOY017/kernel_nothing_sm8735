@@ -258,6 +258,10 @@ CDEFINES +=	-DANI_LITTLE_BYTE_ENDIAN \
 		-Werror\
 		-D__linux__
 
+ifeq ($(NOTH_FACTORY_BUILD), true)
+CDEFINES += -DNOTH_FACTORY_BUILD
+endif
+
 KBUILD_CPPFLAGS += $(CDEFINES)
 
 # Currently, for versions of gcc which support it, the kernel Makefile
@@ -284,6 +288,7 @@ ifeq ($(KERNEL_BUILD), 1)
 	obj-y	+= wsa884x/
 	obj-y	+= wsa883x/
 	obj-y	+= rouleur/
+	obj-y	+= aw882xx/
 	obj-y	+= ./
 endif
 # Module information used by KBuild framework

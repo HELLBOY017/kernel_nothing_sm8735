@@ -682,10 +682,12 @@ skip_video_xo_reset:
 	 */
 	writel_relaxed(0x0, (u8 *)core->register_base_addr + WRAPPER_CORE_POWER_CONTROL);
 
+	usleep_range(800, 1000);
 	rc = call_res_op(core, gdsc_on, core, "vcodec");
 	if (rc)
 		return rc;
 
+	usleep_range(800, 1000);
 	rc = call_res_op(core, gdsc_sw_ctrl, core);
 	if (rc)
 		return rc;
@@ -883,6 +885,7 @@ static int __power_on_iris33_hardware(struct msm_vidc_core *core)
 	 */
 	writel_relaxed(0x0, (u8 *)core->register_base_addr + WRAPPER_CORE_POWER_CONTROL);
 
+	usleep_range(800, 1000);
 	rc = call_res_op(core, gdsc_on, core, "vcodec");
 	if (rc)
 		goto fail_regulator;
@@ -892,6 +895,7 @@ static int __power_on_iris33_hardware(struct msm_vidc_core *core)
 	if (rc)
 		goto fail_power_on_substate;
 
+	usleep_range(800, 1000);
 	rc = call_res_op(core, gdsc_sw_ctrl, core);
 	if (rc)
 		goto fail_sw_ctrl;

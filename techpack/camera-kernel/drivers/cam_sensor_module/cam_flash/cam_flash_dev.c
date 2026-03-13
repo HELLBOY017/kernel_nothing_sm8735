@@ -12,6 +12,7 @@
 #include "cam_common_util.h"
 #include "camera_main.h"
 #include "cam_mem_mgr_api.h"
+#include "cam_sensor_nothing.h"
 
 static int32_t cam_flash_driver_cmd(struct cam_flash_ctrl *fctrl,
 		void *arg, struct cam_flash_private_soc *soc_private)
@@ -208,6 +209,10 @@ static int32_t cam_flash_driver_cmd(struct cam_flash_ctrl *fctrl,
 		}
 		break;
 	}
+	case CAM_FLUSH_REQ: {
+		CAM_DBG(CAM_FLASH, "CAM_FLUSH_REQ");
+		break;
+	}
 	default:
 		CAM_ERR(CAM_FLASH, "Invalid Opcode: %d", cmd->op_code);
 		rc = -EINVAL;
@@ -304,6 +309,7 @@ static long cam_flash_subdev_ioctl(struct v4l2_subdev *sd,
 		rc = cam_flash_driver_cmd(fctrl, arg,
 			soc_private);
 		if (rc) {
+			cam_nt_driver_errcode(fctrl->soc_info.index, NT_CAM_FLASH_ERR);
 			if (rc == -EBADR)
 				CAM_INFO(CAM_FLASH,
 					"Failed in driver cmd: %d, it has been flushed", rc);

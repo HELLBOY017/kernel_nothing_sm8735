@@ -53,6 +53,8 @@ int32_t cam_cci_i2c_read(struct cam_sensor_cci_client *cci_client,
 		*data = buf[0] << 24 | buf[1] << 16 |
 			buf[2] << 8 | buf[3];
 
+	CAM_DBG(CAM_SENSOR, "Addr 0x%x: Data: 0x%x\n", addr, *data);
+
 	return rc;
 }
 
@@ -112,6 +114,7 @@ static int32_t cam_cci_i2c_write_table_cmd(
 {
 	int32_t rc = -EINVAL;
 	struct cam_cci_ctrl cci_ctrl;
+	int i = 0;
 
 	if (!client || !write_setting)
 		return rc;
@@ -141,6 +144,15 @@ static int32_t cam_cci_i2c_write_table_cmd(
 	else if (write_setting->delay)
 		usleep_range(write_setting->delay * 1000, (write_setting->delay
 			* 1000) + 1000);
+
+	for (i = 0; i < write_setting->size; i++) {
+		CAM_DBG(CAM_SENSOR, "sid: 0x%x, addr = 0x%x, data = 0x%x, size = %d, index = %d",
+				client->cci_client->sid,
+				write_setting->reg_setting[i].reg_addr,
+				write_setting->reg_setting[i].reg_data,
+				write_setting->size,
+				i);
+	}
 
 	return rc;
 }

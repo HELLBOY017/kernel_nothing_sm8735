@@ -2154,7 +2154,8 @@ int cam_soc_util_get_reset_resource(struct cam_hw_soc_info *soc_info)
 
 err:
 	for (j = i-1; j >= 0; j--) {
-		soc_info->resets[j] = NULL;
+		reset_control_put(soc_info->resets[i]);
+		soc_info->resets[i] = NULL;
 	}
 	soc_info->num_reset = 0;
 
@@ -2171,9 +2172,9 @@ int cam_soc_util_put_reset_resource(struct cam_hw_soc_info *soc_info)
 	}
 
 	for (i = 0; i < soc_info->num_reset; i++) {
+		reset_control_put(soc_info->resets[i]);
 		soc_info->resets[i] = NULL;
 	}
-	soc_info->num_reset = 0;
 
 	return 0;
 }
