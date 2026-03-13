@@ -120,3 +120,8 @@ bcl_pmic5.ko
 qcom-cpufreq-hw.ko
 nvmem_qfprom.ko
 qfprom-sys.ko
+nothing_writeback_kmsg.ko
+nothing_virtual_ntc.ko
+nothing_error_report.ko
+zsmalloc.ko
+zram.ko
