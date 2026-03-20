@@ -350,6 +350,7 @@ static void __wlan_hdd_ipv6_changed(struct net_device *net_dev,
 	struct hdd_adapter *adapter = WLAN_HDD_GET_PRIV_PTR(net_dev);
 	struct hdd_context *hdd_ctx;
 	int errno;
+	bool queued;
 
 	hdd_enter_dev(net_dev);
 
@@ -371,7 +372,9 @@ static void __wlan_hdd_ipv6_changed(struct net_device *net_dev,
 		hdd_debug("invoking sme_dhcp_done_ind");
 		sme_dhcp_done_ind(hdd_ctx->mac_handle,
 				  adapter->deflink->vdev_id);
-		schedule_work(&adapter->ipv6_notifier_work);
+		queued = schedule_work(&adapter->ipv6_notifier_work);
+		if (queued)
+			hdd_debug("ipv6_notifier_work queued");
 	}
 
 exit:

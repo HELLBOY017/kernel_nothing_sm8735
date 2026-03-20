@@ -3626,7 +3626,8 @@ static inline bool hdd_roaming_supported(struct hdd_context *hdd_ctx)
 static inline void
 hdd_adapter_flush_ipv6_notifier_work(struct hdd_adapter *adapter)
 {
-	flush_work(&adapter->ipv6_notifier_work);
+	bool did_run =  flush_work(&adapter->ipv6_notifier_work);
+	hdd_debug("flush_work: %s", did_run ? "completed pending/running work" : "no work to flush");
 }
 #else
 static inline void
