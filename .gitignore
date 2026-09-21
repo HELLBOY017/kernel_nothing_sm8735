@@ -172,3 +172,6 @@ sphinx_*/
 
 # Ignore out directory
 out/
+
+build.sh
+Version
