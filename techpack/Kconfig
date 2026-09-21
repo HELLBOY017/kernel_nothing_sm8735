@@ -18,4 +18,14 @@ source "techpack/datarmnet-ext/shs/Kconfig"
 
 source "techpack/datarmnet-ext/wlan/Kconfig"
 
+source "techpack/bt-kernel/rtc6226/Kconfig"
+
+source "techpack/bt-kernel/pwr/Kconfig"
+
+source "techpack/bt-kernel/slimbus/Kconfig"
+
+source "techpack/bt-kernel/btfmcodec/Kconfig"
+
+source "techpack/bt-kernel/soundwire/Kconfig"
+
 endmenu
