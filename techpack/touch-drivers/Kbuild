@@ -183,22 +183,22 @@ ifeq ($(CONFIG_TOUCHSCREEN_FTS), y)
 	LINUX_INC += -include $(TOUCH_ROOT)/focaltech_tp/focaltech_test/focaltech_test.h
 	LINUX_INC += -include $(TOUCH_ROOT)/focaltech_tp/focaltech_test/focaltech_test_ini.h
 
-	focaltech_tp-y := focaltech_core.o \
-		focaltech_ex_fun.o \
-		focaltech_ex_mode.o \
-		focaltech_gesture.o \
-		focaltech_esdcheck.o \
-		focaltech_point_report_check.o \
-		focaltech_proximity.o
+	focaltech_tp-y := ./focaltech_tp/focaltech_core.o \
+		./focaltech_tp/focaltech_ex_fun.o \
+		./focaltech_tp/focaltech_ex_mode.o \
+		./focaltech_tp/focaltech_gesture.o \
+		./focaltech_tp/focaltech_esdcheck.o \
+		./focaltech_tp/focaltech_point_report_check.o \
+		./focaltech_tp/focaltech_proximity.o
 
-	focaltech_tp-y += focaltech_spi_v2.o
-	focaltech_tp-y += focaltech_debug.o
-	focaltech_tp-y += focaltech_hp.o
-	focaltech_tp-y += focaltech_flash.o
-	focaltech_tp-y += focaltech_flash/focaltech_upgrade_ft3683g.o
-	focaltech_tp-y += focaltech_test/focaltech_test.o
-	focaltech_tp-y += focaltech_test/focaltech_test_ini.o
-	focaltech_tp-y += focaltech_test/supported_ic/focaltech_test_ft3683g.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_spi_v2.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_debug.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_hp.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_flash.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_flash/focaltech_upgrade_ft3683g.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_test/focaltech_test.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_test/focaltech_test_ini.o
+	focaltech_tp-y += ./focaltech_tp/focaltech_test/supported_ic/focaltech_test_ft3683g.o
 	obj-$(CONFIG_MSM_TOUCH) += focaltech_tp.o
 endif
 
