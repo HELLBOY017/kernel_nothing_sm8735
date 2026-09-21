@@ -8473,73 +8473,73 @@ static void cam_req_mgr_process_workq_apply_req_worker(struct work_struct *w)
 }
 
 static inline void __cam_isp_ctx_convert_hw_id_to_string(
-	char *ife_hw_name, uint32_t hw_idx)
+	char *ife_hw_name, size_t ife_hw_name_size, uint32_t hw_idx)
 {
 	int num_hw = 0, len = 0;
 	char tmp_buf[30];
 
 	if (hw_idx & CAM_ISP_IFE0_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE0 ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE1_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE1 ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE2_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE2 ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE0_LITE_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE0_LITE ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE1_LITE_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE1_LITE ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE2_LITE_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE2_LITE ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE3_LITE_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE3_LITE ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_IFE4_LITE_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"IFE4_LITE ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_SFE0_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"SFE0 ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_SFE1_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"SFE1 ");
 		num_hw++;
 	}
 
 	if (hw_idx & CAM_ISP_SFE2_HW) {
-		len += snprintf(ife_hw_name + len, sizeof(ife_hw_name) - len,
+		len += snprintf(ife_hw_name + len, ife_hw_name_size - len,
 			"SFE2 ");
 		num_hw++;
 	}
@@ -8551,11 +8551,11 @@ static inline void __cam_isp_ctx_convert_hw_id_to_string(
 
 	if (num_hw == 2) {
 		snprintf(tmp_buf, sizeof(tmp_buf), "Dual: %s", ife_hw_name);
-		len = snprintf(ife_hw_name, sizeof(ife_hw_name), "%s", tmp_buf);
+		len = snprintf(ife_hw_name, ife_hw_name_size, "%s", tmp_buf);
 	}
 
 	/* Remove the last space */
-	if ((len > 0) && (len < sizeof(ife_hw_name)))
+	if ((len > 0) && (len < ife_hw_name_size))
 		ife_hw_name[len - 1] = '\0';
 }
 
@@ -8737,7 +8737,7 @@ static int __cam_isp_ctx_acquire_hw_v2(struct cam_context *ctx,
 		msg.link_hdl = ctx->link_hdl;
 		msg.dev_hdl = ctx->dev_hdl;
 		msg.msg_type = CAM_REQ_MGR_MSG_UPDATE_DEVICE_INFO;
-		__cam_isp_ctx_convert_hw_id_to_string(&msg.u.ife_hw_name[0], ctx_isp->hw_idx);
+		__cam_isp_ctx_convert_hw_id_to_string(&msg.u.ife_hw_name[0], sizeof(msg.u.ife_hw_name), ctx_isp->hw_idx);
 		rc = ctx->ctx_crm_intf->notify_msg(&msg);
 		if (rc) {
 			CAM_WARN(CAM_ISP, "Failed at updating IFE hw idx to CRM");
