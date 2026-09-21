@@ -1,6 +1,8 @@
 # ported from Android.mk
 $(info within KBUILD file KBUILD_EXTRA_SYMBOLS = $(KBUILD_EXTRA_SYMBOLS))
 
+DSP_ROOT := $(srctree)/techpack/dsp-kernel
+
 ifeq ($(CONFIG_ARCH_WAIPIO), y)
 $(info within KBUILD file CONFIG_ARCH_WAIPIO = $(CONFIG_ARCH_WAIPIO))
 KBUILD_CPPFLAGS += -DCONFIG_DSP_WAIPIO=1

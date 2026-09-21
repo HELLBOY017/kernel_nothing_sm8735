@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
+VIDEO_ROOT := $(srctree)/techpack/video-driver
+
 VIDEO_DRIVER_ABS_PATH := $(VIDEO_ROOT)/video/driver
 VIDEO_DRIVER_REL_PATH := ../video/driver
 

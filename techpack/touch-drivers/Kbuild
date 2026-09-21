@@ -1,6 +1,8 @@
 
 KDIR := $(TOP)/kernel_platform/common
 
+TOUCH_ROOT := $(srctree)/techpack/touch-drivers
+
 ifeq ($(CONFIG_ARCH_VIENNA), y)
 	include $(TOUCH_ROOT)/config/gki_viennatouch.conf
 	LINUX_INC += -include $(TOUCH_ROOT)/config/gki_viennatouchconf.h

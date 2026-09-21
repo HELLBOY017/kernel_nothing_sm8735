@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
+SPU_ROOT := $(srctree)/techpack/spu-kernel
 
 ifeq ($(CONFIG_QCOM_SPSS), m)
         include $(SPU_ROOT)/config/gki_spu.conf

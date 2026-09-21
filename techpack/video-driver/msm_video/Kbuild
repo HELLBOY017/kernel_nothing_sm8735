@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
+VIDEO_ROOT := $(srctree)/techpack/video-driver
+
 KBUILD_CPPFLAGS += -DCONFIG_MSM_MMRM=1
 VIDEO_DRIVER_ABS_PATH := $(VIDEO_ROOT)/msm_video/driver
 VIDEO_DRIVER_REL_PATH := ../msm_video/driver
