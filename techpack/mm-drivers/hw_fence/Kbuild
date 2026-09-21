@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
-KDIR := $(TOP)/kernel_platform/msm-kernel
+MSM_HW_FENCE_ROOT := $(srctree)/techpack/mm-drivers/
+
 ifeq ($(CONFIG_ARCH_SUN), y)
 include $(MSM_HW_FENCE_ROOT)hw_fence/sun_defconfig
 LINUXINCLUDE += -include $(MSM_HW_FENCE_ROOT)hw_fence/sun_defconfig.h \
