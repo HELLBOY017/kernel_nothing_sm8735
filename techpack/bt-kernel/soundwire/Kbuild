@@ -1,0 +1,4 @@
+ccflags-y += -I$(BT_ROOT)/include
+ccflags-y += \
+	-I$(BT_ROOT)/../audio-kernel/include\
+	-I$(BT_ROOT)/btfmcodec/include
