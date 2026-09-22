@@ -14,13 +14,13 @@ struct iommu_iotlb_gather;
 struct kvm_hyp_iommu_domain;
 struct kvm_iommu_paddr_cache;
 
-#ifdef CONFIG_MODULES
 enum pkvm_psci_notification {
 	PKVM_PSCI_CPU_SUSPEND,
 	PKVM_PSCI_SYSTEM_SUSPEND,
 	PKVM_PSCI_CPU_ENTRY,
 };
 
+#ifdef CONFIG_MODULES
 /**
  * struct pkvm_module_ops - pKVM modules callbacks
  * @create_private_mapping:	Map a memory region into the hypervisor private

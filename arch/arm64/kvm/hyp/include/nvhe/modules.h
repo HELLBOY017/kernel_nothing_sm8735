@@ -28,7 +28,7 @@ static inline int __pkvm_init_module(void *module_init) { return -EOPNOTSUPP; }
 static inline int
 __pkvm_register_hcall(unsigned long hfn_hyp_va) { return -EOPNOTSUPP; }
 static inline int
-handle_host_dynamic_hcall(struct kvm_cpu_context *host_ctxt, int id)
+handle_host_dynamic_hcall(struct user_pt_regs *regs, int id)
 {
 	return HCALL_UNHANDLED;
 }
