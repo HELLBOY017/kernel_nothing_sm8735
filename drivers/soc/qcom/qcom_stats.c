@@ -23,6 +23,12 @@
 #include <soc/qcom/qcom_stats.h>
 #include <clocksource/arm_arch_timer.h>
 
+#ifndef MODULE
+// Create a bogus parameter to forcefully populate /sys/module/soc_sleep_stats
+static int bogus;
+module_param(bogus, int, 0644);
+#endif
+
 #define RPM_DYNAMIC_ADDR	0x14
 #define RPM_DYNAMIC_ADDR_MASK	0xFFFF
 
@@ -1164,22 +1170,11 @@ static ssize_t nt_rpmh_master_stats_show(struct kobject *kobj, struct kobj_attri
 	return length;
 }
 
-static struct kobject *get_module_kobj(struct device *dev)
-{
-
-	if(!dev) {
-		return NULL;
-	}
-	return &dev->driver->owner->mkobj.kobj;
-
-
-}
-
 static struct kobject *nt_power_kobj;
 static int soc_sleep_stats_create_sysfs(struct platform_device *pdev, struct soc_sleep_stats_data *drv)
 {
 	int ret = 0;
-	nt_power_kobj = get_module_kobj(&pdev->dev);
+	nt_power_kobj = kset_find_obj(module_kset, KBUILD_MODNAME);
 	if(!nt_power_kobj)
 		return -EINVAL;
 	drv->stats_kobj = kobject_create_and_add("soc_sleep", nt_power_kobj);
