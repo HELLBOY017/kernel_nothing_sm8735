@@ -87,8 +87,7 @@ enum ffs_os_desc_type {
 };
 
 #define kprobe_log(context, fmt, ...) \
-	ipc_log_string(context, "%s: " fmt, \
-		get_kretprobe(ri)->kp.symbol_name, ##__VA_ARGS__)
+	ipc_log_string(context, fmt, ##__VA_ARGS__)
 
 #define MAX_IPC_INSTANCES 9
 
