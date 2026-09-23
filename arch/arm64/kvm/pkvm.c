@@ -860,8 +860,10 @@ unsigned long pkvm_el2_mod_kern_va(unsigned long addr)
 	return 0;
 }
 #else
+#ifdef CONFIG_MODULES
 static void pkvm_el2_mod_add(struct pkvm_el2_module *mod) { }
 unsigned long pkvm_el2_mod_kern_va(unsigned long addr) { return 0; }
+#endif
 #endif
 
 #ifdef CONFIG_MODULES
