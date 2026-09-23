@@ -71,7 +71,7 @@ struct upgrade_func *upgrade_func_list[] = {
     &upgrade_func_ft5672,
 };
 
-struct fts_upgrade *fwupgrade;
+static struct fts_upgrade *fwupgrade;
 
 /*****************************************************************************
 * Static function prototypes
