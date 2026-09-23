@@ -30,8 +30,8 @@ static char rec_err_parts[MAX_STRING_LENGTH] = {0};
 static char proc_data[2] = {'0', '\0'};
 static int cur_len = 0;
 static struct kprobe *g_krp = NULL;
-struct proc_dir_entry *root = NULL;
-struct proc_dir_entry *enable_node = NULL;
+static struct proc_dir_entry *root = NULL;
+static struct proc_dir_entry *enable_node = NULL;
 struct proc_dir_entry *result_node = NULL;
 
 static int append_to_arr(const char *str) {
@@ -93,7 +93,7 @@ OUT:
 	return 0;
 }
 
-int insert_kprobe(char *symbol_name) {
+static int insert_kprobe(char *symbol_name) {
 	int ret;
 
 	if (proc_data[0] == '0') {

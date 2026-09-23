@@ -167,8 +167,8 @@ static char timestamp_arry[NT_MAX_DIFF_RECORD][NT_TIMESTAMP_MAX_LEN] = {0};
 static int cur_record_round = 0;
 static int pre_trigger_dump_round = 0;
 
-struct proc_dir_entry *root = NULL;
-struct proc_dir_entry *enable_node = NULL;
+static struct proc_dir_entry *root = NULL;
+static struct proc_dir_entry *enable_node = NULL;
 struct proc_dir_entry *schedule_period_node = NULL;
 struct proc_dir_entry *record_threshold_node = NULL;
 struct proc_dir_entry *debug_log_enable_node = NULL;
