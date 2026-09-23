@@ -91,7 +91,7 @@ int cnss_wlfw_qdss_data_send_sync(struct cnss_plat_data *plat_priv, char *file_n
 int cnss_wlfw_tme_opt_file_dnld_send_sync(struct cnss_plat_data *plat_priv,
 				       enum wlfw_tme_lite_file_type_v01 file);
 int wlfw_qdss_trace_start(struct cnss_plat_data *plat_priv);
-int wlfw_qdss_trace_stop(struct cnss_plat_data *plat_priv, unsigned long long option);
+int cnss2_cnss2_wlfw_qdss_trace_stop(struct cnss_plat_data *plat_priv, unsigned long long option);
 int cnss_wlfw_cal_report_req_send_sync(struct cnss_plat_data *plat_priv,
 				       u32 cal_file_download_size);
 int cnss_send_subsys_restart_level_msg(struct cnss_plat_data *plat_priv);
@@ -329,7 +329,7 @@ static inline int wlfw_qdss_trace_start(struct cnss_plat_data *plat_priv)
 	return 0;
 }
 
-static inline int wlfw_qdss_trace_stop(struct cnss_plat_data *plat_priv,
+static inline int cnss2_cnss2_wlfw_qdss_trace_stop(struct cnss_plat_data *plat_priv,
 				       unsigned long long option)
 {
 	return 0;

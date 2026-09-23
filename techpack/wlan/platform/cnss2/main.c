@@ -6444,7 +6444,7 @@ static ssize_t qdss_trace_stop_store(struct device *dev,
 	if (sscanf(buf, "%du", &option) != 1)
 		return -EINVAL;
 
-	wlfw_qdss_trace_stop(plat_priv, option);
+	cnss2_cnss2_wlfw_qdss_trace_stop(plat_priv, option);
 	cnss_pr_dbg("Received QDSS stop command\n");
 	return count;
 }
